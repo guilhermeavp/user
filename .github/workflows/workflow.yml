@@ -24,27 +24,38 @@
 #    See the documentation for each action used below for the recommended IAM policies for this IAM user,
 #    and best practices on handling the access key credentials.
 
-name: Push-to-EC2
+name: CI
 
-# Trigger deployment only on push to master branch
 on:
   push:
-    branches:
-      - master
+    branches: [ master ]
+
+  workflow_dispatch:
 
 jobs:
-  deploy:
-    name: Deploy to EC2 on master branch push
+  build:
+
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout the files
-        uses: actions/checkout@v2
+    if: github.ref == 'refs/heads/master'
 
-      - name: Deploy to Server 1
-        uses: easingthemes/ssh-deploy@main
-        env:
-          SSH_PRIVATE_KEY: ${{secrets.EC2_SSH_KEY}}
-          REMOTE_HOST: ${{secrets.REMOTE_HOST}}
-          REMOTE_USER: ${{secrets.REMOTE_USER}}
-          TARGET: ${{secrets.TARGET_DIR}}
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - run: npm ci
+      - run: npm run build
+      - run: npm run test
+
+      - name: rsync deployments
+        uses: burnett01/rsync-deployments@5.1
+        with:
+          switches: -avzr --delete
+          path: ./*
+          remote_path: /home/ec2-user/user/
+          remote_host: <host>.compute.amazonaws.com
+          remote_user: ubuntu
+          remote_key: "${{ secrets.SSH_PRIVATE_KEY }}"
