@@ -34,17 +34,21 @@ jobs:
     name: Deploy to EC2
     runs-on: ubuntu-latest
     steps:
+    - name: Install npm dependencies
+      run: npm install
+    - name: Run build task
+      run: npm run build
     - name: Checkout the files
       uses: actions/checkout@v3
-
     - name: Copy files with SSH
       uses: easingthemes/ssh-deploy@main
       env:
         SSH_PRIVATE_KEY: ${{secrets.EC2_SSH_KEY}}
-        SOURCE: "./"
+        ARGS: "-avzr --delete"
+        SOURCE: "dist/"
         REMOTE_HOST: ${{secrets.REMOTE_HOST}}
         REMOTE_USER: ${{secrets.REMOTE_USER}}
         TARGET: ${{secrets.TARGET_DIR}}
-        EXCLUDE: "/dist/, /node_modules/, **.env, rebuild_app.sh, watcher.sh"
-      run: npm install
-      run: nohup npm start &
+        EXCLUDE: "/dist/, /node_modules/"
+      SCRIPT_BEFORE: |
+        nohup npm start &
