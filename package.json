@@ -1,0 +1,46 @@
+{
+  "name": "user",
+  "version": "1.0.0",
+  "description": "Gerenciamento de user",
+  "author": "Guilherme Augusto Vieira Penteado",
+  "license": "MIT",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint",
+    "start": "nodemon --watch src src/server.ts"
+  },
+  "dependencies": {
+    "@hapi/boom": "^10.0.0",
+    "@hapi/hapi": "^20.2.2",
+    "argon2": "^0.27.0",
+    "bcrypt": "^5.1.1",
+    "consul": "^1.1.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "hapi-auth-jwt": "^4.0.0",
+    "hapi-auth-jwt2": "^10.5.1",
+    "joi": "^17.13.1",
+    "jwks-rsa": "^3.1.0",
+    "lodash": "^4.17.21",
+    "mongodb": "^6.6.1",
+    "mongoose": "^8.4.0",
+    "mongoose-keywords": "^0.4.1",
+    "slugify": "^1.6.6"
+  },
+  "devDependencies": {
+    "@types/consul": "^0.40.0",
+    "@types/hapi__hapi": "^20.0.12",
+    "@types/node": "^18.8.4",
+    "@typescript-eslint/eslint-plugin": "^5.40.0",
+    "eslint": "^8.25.0",
+    "eslint-config-standard-with-typescript": "^23.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.3.0",
+    "eslint-plugin-promise": "^6.0.1",
+    "nodemon": "^2.0.20",
+    "ts-node": "^10.9.1",
+    "tslib": "^2.4.0",
+    "typescript": "^4.8.4"
+  }
+}
