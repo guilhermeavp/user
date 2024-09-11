@@ -34,12 +34,6 @@ jobs:
     name: Deploy to EC2
     runs-on: ubuntu-latest
     steps:
-    - name: npm install
-      run: npm install
-
-    - name: Run build task
-      run: npm run build
-
     - name: Checkout the files
       uses: actions/checkout@v3
 
@@ -55,3 +49,9 @@ jobs:
         EXCLUDE: "/dist/, /node_modules/"
         SCRIPT_BEFORE: |
           nohup npm start &
+
+    - name: npm install
+      run: npm install
+
+    - name: Run build task
+      run: npm run build
