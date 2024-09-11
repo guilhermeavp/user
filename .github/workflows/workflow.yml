@@ -24,35 +24,27 @@
 #    See the documentation for each action used below for the recommended IAM policies for this IAM user,
 #    and best practices on handling the access key credentials.
 
-name: Deploy
+name: Push-to-EC2
 
+# Trigger deployment only on push to master branch
 on:
   push:
-    branches: [ main ]
+    branches:
+      - master
 
 jobs:
-  Deploy:
-    name: Deploy to EC2
+  deploy:
+    name: Deploy to EC2 on master branch push
     runs-on: ubuntu-latest
-    
-    steps:
-      - uses: actions/checkout@v2 
-      - name: Build & Deploy
-        env:
-            PRIVATE_KEY: ${{secrets.EC2_SSH_KEY}}
-            HOSTNAME: ${{secrets.REMOTE_HOST}}
-            USER_NAME: ${{secrets.REMOTE_USER}}
-      
-        run: |
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
 
-              # Now we have got the access of EC2 and we will start the deploy .
-              cd /home/ec2-user/<PROJECT_DIRECTORY> &&
-              git checkout dev &&
-              git fetch --all &&
-              git reset --hard origin/dev &&
-              git pull origin dev &&
-              sudo npm i &&
-              sudo npm run build &&
-              sudo pm2 stop ./dist/index.js &&
-              sudo pm2 start ./dist/index.js
+    steps:
+      - name: Checkout the files
+        uses: actions/checkout@v2
+
+      - name: Deploy to Server 1
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          TARGET: ${{ secrets.TARGET_DIR }}
