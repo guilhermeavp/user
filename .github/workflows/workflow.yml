@@ -34,12 +34,15 @@ jobs:
     name: Deploy to EC2
     runs-on: ubuntu-latest
     steps:
-    - name: Install npm dependencies
+    - name: npm install
       run: npm install
+
     - name: Run build task
       run: npm run build
+
     - name: Checkout the files
       uses: actions/checkout@v3
+
     - name: Copy files with SSH
       uses: easingthemes/ssh-deploy@main
       env:
