@@ -20,7 +20,7 @@ const init = async () => {
         process.exit();
     });
     //TODO
-    initConsul();
+    //initConsul();
 };
 
 init();
