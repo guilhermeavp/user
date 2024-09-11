@@ -46,7 +46,5 @@ jobs:
         REMOTE_USER: ${{secrets.REMOTE_USER}}
         TARGET: ${{secrets.TARGET_DIR}}
         EXCLUDE: "/dist/, /node_modules/, **.env, rebuild_app.sh, watcher.sh"
-    - name: npm install
-      run: npm install
-    - name: npm start
-      run: nohup npm start &
+        run: npm install
+        run: nohup npm start &
