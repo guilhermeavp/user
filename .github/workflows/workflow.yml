@@ -50,5 +50,5 @@ jobs:
         REMOTE_USER: ${{secrets.REMOTE_USER}}
         TARGET: ${{secrets.TARGET_DIR}}
         EXCLUDE: "/dist/, /node_modules/"
-      SCRIPT_BEFORE: |
-        nohup npm start &
+        SCRIPT_BEFORE: |
+          nohup npm start &
