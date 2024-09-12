@@ -1,7 +1,5 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
-name: Push-to-EC2
 on:
   push:
     branches:
@@ -14,13 +12,16 @@ jobs:
     - name: Checkout the files
       uses: actions/checkout@v3
 
+    - run: npm ci
+    - run: npm run build
+
     - name: Copy files with SSH
       uses: easingthemes/ssh-deploy@main
       env:
         SSH_PRIVATE_KEY: ${{secrets.EC2_SSH_KEY}}
         ARGS: "-rltgoDzvO --delete"
-        SOURCE: "./"
+        SOURCE: "./dist/"
         REMOTE_HOST: ${{secrets.REMOTE_HOST}}
         REMOTE_USER: ${{secrets.REMOTE_USER}}
         TARGET: ${{secrets.TARGET_DIR}}
-        EXCLUDE: "/dist/, /node_modules/, **.env, rebuild_app.sh, watcher.sh"
+        EXCLUDE: "/node_modules/, **.env, rebuild_app.sh, watcher.sh"
